@@ -200,7 +200,9 @@ function finishTimer(status) {
     elements.sessionInput.classList.remove('input-error');
 
     if (status === 'Completed' && STATE.timeLeft === 0) {
-        alert('Session Completed! Great job!');
+        setTimeout(() => {
+            alert('Session Completed! Great job!');
+        }, 500); // Delay alert to ensure audio starts
     }
 }
 
