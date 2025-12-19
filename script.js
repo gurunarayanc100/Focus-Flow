@@ -129,19 +129,27 @@ function startTimer() {
     elements.sessionInput.classList.remove('input-error');
 
     STATE.isRunning = true;
+    STATE.endTime = Date.now() + (STATE.timeLeft * 1000); // Set target end time
     toggleControls(true); // Shows Pause & Stop
 
     STATE.intervalId = setInterval(() => {
-        if (STATE.timeLeft > 0) {
-            STATE.timeLeft--;
+        const now = Date.now();
+        const distance = STATE.endTime - now;
+
+        if (distance > 0) {
+            // Update timeLeft based on actual checking of the clock
+            STATE.timeLeft = Math.ceil(distance / 1000);
             updateTimerDisplay();
             const percent = (STATE.timeLeft / STATE.totalTime) * 100;
             setProgress(percent);
         } else {
             // Natural Finish
+            STATE.timeLeft = 0;
+            updateTimerDisplay();
+            setProgress(0);
             finishTimer('Completed');
         }
-    }, 1000);
+    }, 100); // Check more frequently for smoothness, though logic handles any drift
 }
 
 function pauseTimer() {
